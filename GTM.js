@@ -42,9 +42,6 @@
         }
     }
 
-    // ✅ Run when path contains "/moas/login"
-    if (window.location.pathname.includes("/moas/login")) {
-        injectGTM();
-    }
+    injectGTM();
 
 })();
