@@ -1,27 +1,50 @@
-if (location.pathname === "/moas/") {
+(function () {
 
-  // 1. Add GTM script in <head>
-  (function(w, d, s, l, i) {
-    w[l] = w[l] || [];
-    w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    function injectGTM() {
 
-    var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l != 'dataLayer' ? '&l=' + l : '';
+        // duplicate loading
+        if (window.dataLayer) return;
 
-    j.async = true;
-    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        console.log("GTM Injecting...");
 
-    f.parentNode.insertBefore(j, f);
-  })(window, document, 'script', 'dataLayer', 'GTM-N5WJ95Q9');
+        // Initialize dataLayer
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            'gtm.start': new Date().getTime(),
+            event: 'gtm.js'
+        });
 
+        // Create GTM script
+        var script = document.createElement("script");
+        script.async = true;
+        script.src = "https://www.googletagmanager.com/gtm.js?id=GTM-N5WJ95Q9";
 
-  // 2. Add noscript immediately after <body>
-  var noscript = document.createElement('noscript');
-  noscript.innerHTML = `
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N5WJ95Q9"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe>
-  `;
+        // Insert into head (top)
+        var firstScript = document.getElementsByTagName("script")[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
 
-  document.body.insertBefore(noscript, document.body.firstChild);
-}
+        // Create noscript iframe
+        var noscript = document.createElement("noscript");
+        noscript.innerHTML = `
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N5WJ95Q9"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        `;
+
+        // Insert at top of body safely
+        function insertNoScript() {
+            document.body.insertBefore(noscript, document.body.firstChild);
+        }
+
+        if (document.body) {
+            insertNoScript();
+        } else {
+            document.addEventListener("DOMContentLoaded", insertNoScript);
+        }
+    }
+
+    // ✅ Run when path contains "/moas/login"
+    if (window.location.pathname.includes("/moas/login")) {
+        injectGTM();
+    }
+
+})();
