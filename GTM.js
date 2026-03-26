@@ -5,7 +5,7 @@
         // duplicate loading
         if (window.dataLayer) return;
 
-        console.log("GTM Injecting...");
+        console.log("GTM Injecting....");
 
         // Initialize dataLayer
         window.dataLayer = window.dataLayer || [];
